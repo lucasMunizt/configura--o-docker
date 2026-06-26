@@ -4,8 +4,6 @@
 * Fluxo do atendimeto ao cliente
 * Prompt do atendimento ao cliente
 
-
-
 # Ambiente Docker para Chatbot com n8n, WAHA e Redis
 
 Este arquivo apresenta um resumo da configuração Docker utilizada para executar o ambiente do chatbot. A solução utiliza três serviços principais:
@@ -292,17 +290,23 @@ Atenção: esse comando apaga os dados armazenados nos volumes, incluindo dados 
 - Em produção, recomenda-se hospedar o ambiente em uma VPS e configurar um domínio com HTTPS.
 - Também é recomendado substituir senhas de teste por credenciais seguras antes de colocar o sistema em produção.
 
+---
+
 
 
 # Fluxo atendimento ao cliente
 
+Lembre-se de alterar o promt do fluxo para o ideal para sua necessidade!
 
+fluxo de atendimento  se encontra nos arquivos acima denominado "FLUXO ATENDIMENTO AO CLIENTE FINAL.JSON"
+
+---
 
 
 
 # prompt Utilizado
 
-Nesse prompt e utilizado no fluxo a cima! 
+Nesse prompt e utilizado no fluxo a cima!
 
 ```
 Você é Clara, assistente virtual da [nome da empresa].
@@ -589,5 +593,4 @@ Não use dados de exemplo na conversa real.
 Não pergunte cidade ou estado.
 Considere sempre Fortaleza - CE.
 Seja objetiva e cordial.
-
 ```
