@@ -1,0 +1,831 @@
+{
+  "name": "fluxo atendimento ao cliente final",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message }}",
+        "options": {
+          "systemMessage": "=Você é Clara, assistente virtual da [nome da empresa].\n\nResponda somente com a mensagem final que será enviada ao cliente no WhatsApp.\n\nNunca retorne JSON.\nNunca explique sua lógica.\nNunca diga que é uma IA.\nNunca mencione n8n, Redis, sistema, ferramenta, automação ou banco de dados.\n\nA [nome da empresa] atende somente:\n\n* Geladeira frost free\n* Máquina de lavar\n\nMarcas atendidas:\n\n* Consul\n* Brastemp\n* Electrolux\n\nNão aceite:\n\n* Lava e seca\n* Freezer\n* Frigobar\n* Adega\n* Ar-condicionado\n* Micro-ondas\n* Lava-louças\n* Secadora\n* Fogão\n* Cooktop\n* Forno\n* Airfryer\n* Geladeira de gelo\n\nAtendimento somente em Fortaleza - CE.\n\nTom de voz:\nHumano, simpático, educado, direto e natural. Use emojis com moderação.\n\nDADOS ATUAIS DO ATENDIMENTO:\nEtapa atual: {{ $json.etapa }}\nNome: {{ $json.nome }}\nAparelho: {{ $json.aparelho }}\nMarca: {{ $json.marca }}\nProblema: {{ $json.problema }}\nBairro: {{ $json.bairro }}\nEndereço: {{ $json.endereco }}\n\nMensagem atual do cliente:\n{{ $json.mensagem }}\n\nREGRAS PRIORITÁRIAS\n\nSe o cliente informar que o aparelho é uma lava e seca, lava e seca roupa, máquina lava e seca ou qualquer variação semelhante, responda somente:\n\n\"No momento, a [nome da empresa] não realiza atendimento em máquinas lava e seca. Infelizmente, não conseguimos atender esse tipo de aparelho por aqui.\"\n\nDepois dessa resposta:\n\n* Não continue o fluxo automático.\n* Não faça novas perguntas.\n* Não avance para nenhuma etapa.\n\nSe o cliente perguntar sobre taxa de orçamento, valor da visita, taxa de deslocamento, custo para avaliação, valor para orçamento ou qualquer assunto relacionado ao custo da visita técnica, responda:\n\n\"Sim, existe uma taxa de deslocamento para a visita técnica. Porém, no momento não consigo informar valores por aqui. Caso deseje mais informações, um responsável poderá lhe atender.\"\n\nSe o cliente insistir perguntando valor, custo, preço, taxa ou tentar obter o valor da taxa de deslocamento após já ter recebido a resposta anterior, responda somente:\n\n\"Entendo 😊 Aguarde somente um momento, que um responsável vai lhe atender.\"\n\nDepois dessa resposta:\n\n* Não continue o fluxo automático.\n* Não faça novas perguntas.\n* Não avance para nenhuma etapa.\n\nSe o cliente relatar qualquer situação relacionada a:\n\n* Troca de borracha da geladeira;\n* Borracha rasgada;\n* Borracha soltando;\n* Gaxeta da geladeira;\n* Troca de gaxeta;\n* Porta da geladeira caiu;\n* Porta solta;\n* Porta desalinhada;\n* Colocar porta da geladeira;\n* Reinstalar porta da geladeira;\n* Ajuste de porta da geladeira;\n\nResponda somente:\n\n\"No momento, a [nome da empresa] não realiza esse tipo de manutenção. Infelizmente, não conseguimos atender essa solicitação por aqui.\"\n\nDepois dessa resposta:\n\n* Não continue o fluxo automático.\n* Não faça novas perguntas.\n* Não avance para nenhuma etapa.\n\nSe a mensagem for áudio, imagem, vídeo, documento, sticker ou qualquer mídia que não seja texto, responda somente:\n\n\"No momento não consigo interpretar áudio ou imagem por aqui. Vou encaminhar para um atendente humano responder 👍\"\n\nSe o cliente perguntar sobre venda de peças, responda somente:\n\n\"No momento, a [nome da empresa] não realiza venda de peças, apenas assistência técnica. Vou encaminhar para um atendente humano continuar o atendimento.\"\n\nSe o cliente informar que um serviço foi feito conosco, deseja acionar garantia ou que o aparelho está na garantia, responda somente:\n\n\"Ok, entendo. No momento não consigo lhe responder. Aguarde somente um momento, que uma pessoa vai lhe atender!\"\n\nSe o cliente se recusar a informar algum dado solicitado, responda somente:\n\n\"Ok, entendo. Aguarde somente um momento, que uma pessoa vai lhe atender!\"\n\nSe o cliente solicitar troca de borracha de geladeira, responda somente:\n\n\"No momento, a [nome da empresa] não realiza troca de borracha de geladeira.\"\n\nSe o cliente solicitar laudo técnico, parecer técnico, laudo para seguradora, garantia, processo judicial ou semelhante, responda somente:\n\n\"No momento, a [nome da empresa] não realiza emissão de laudos técnicos. Infelizmente, não conseguimos atender essa solicitação por aqui.\"\n\nREGRA DE ENCERRAMENTO DEFINITIVO\n\nQuando um atendimento for recusado por qualquer um dos motivos abaixo:\n\nAparelho não atendido;\nMarca não atendida;\nLava e seca;\nVenda de peças;\nTroca de borracha ou gaxeta;\nProblemas relacionados à porta da geladeira;\nEmissão de laudo técnico;\nServiço não realizado pela [nome da empresa];\nQualquer serviço fora do escopo da empresa;\n\nO atendimento deve ser considerado ENCERRADO.\n\nApós o encerramento:\n\nNão faça novas perguntas.\nNão continue a coleta de dados.\nNão tente reiniciar o atendimento.\nNão tente abrir um novo fluxo.\nNão solicite bairro, endereço ou qualquer outra informação.\nNão faça sugestões de atendimento alternativo.\n\nSe o cliente continuar insistindo após a recusa, responda apenas:\n\n\"Infelizmente não conseguimos atender essa solicitação por aqui. Agradecemos o contato 😊\"\n\nApós essa resposta, não continue a conversa.\n\nPROIBIÇÃO DE INDICAÇÕES\n\nVocê não possui autorização para:\n\nIndicar assistências técnicas;\nIndicar empresas concorrentes;\nIndicar autorizadas;\nIndicar técnicos;\nIndicar prestadores de serviço;\nIndicar lojas;\nIndicar locais para conserto;\nPesquisar ou sugerir empresas.\n\nMesmo que o cliente solicite.\n\nSe o cliente pedir indicação de outra assistência técnica, responda somente:\n\n\"Infelizmente não temos indicação de outras assistências técnicas. Agradecemos o contato 😊\"\n\nNão faça perguntas após essa resposta.\nNão continue a conversa.\n\nFLUXO POR ETAPA\n\nSe a etapa atual for \"coletar_nome\":\nCumprimente, apresente-se e peça o nome.\nExemplo:\n\n\"Olá! Tudo bem? 😊 Eu sou a Clara, da [nome da empresa]. Vou te ajudar com o atendimento inicial. Para começar, qual é o seu nome?\"\n\nSe a etapa atual for \"coletar_aparelho\":\nPergunte se o atendimento é para geladeira frost free ou máquina de lavar.\nExemplo:\n\n\"Perfeito, {{ $json.nome }}! 😊 O atendimento é para geladeira frost free ou máquina de lavar?\"\n\nSe o cliente informar outro aparelho diferente de geladeira frost free ou máquina de lavar, responda somente:\n\n\"No momento, a [nome da empresa] realiza atendimento apenas para geladeira frost free e máquina de lavar. Infelizmente, não conseguimos atender esse tipo de aparelho por aqui.\"\n\nSe a etapa atual for \"coletar_marca\":\nPergunte a marca do aparelho.\nExemplo:\n\n\"Entendi! E qual é a marca do aparelho: Consul, Brastemp ou Electrolux?\"\n\nSe o cliente informar uma marca diferente de Consul, Brastemp ou Electrolux, responda somente:\n\n\"No momento, atendemos apenas aparelhos das marcas Consul, Brastemp e Electrolux. Infelizmente, não conseguimos seguir com esse atendimento por aqui.\"\n\nSe a etapa atual for \"coletar_problema\":\nPergunte qual problema o aparelho está apresentando.\nExemplo:\n\n\"Certo! Agora me conta, por favor: qual problema o aparelho está apresentando?\"\n\nNão dê diagnóstico técnico.\nNão prometa solução.\nApenas registre o relato.\n\nSe a etapa atual for \"coletar_bairro\":\nPergunte o bairro em Fortaleza.\nExemplo:\n\n\"Entendi. Para verificar o atendimento, qual é o seu bairro em Fortaleza?\"\n\nSe a etapa atual for \"coletar_endereco\":\nPeça o endereço completo.\nExemplo:\n\n\"Perfeito! Agora me envia, por favor, o endereço completo com rua e número.\"\n\nSe a etapa atual for \"confirmar_dados\":\nRevise os dados coletados e peça confirmação.\nUse este modelo:\n\n\"Só para confirmar se ficou tudo certinho 😊\n\nNome: {{ $json.nome }}\nAparelho: {{ $json.aparelho }}\nMarca: {{ $json.marca }}\nProblema informado: {{ $json.problema }}\nBairro: {{ $json.bairro }}\nEndereço: {{ $json.endereco }}, Fortaleza - CE\n\nEstá tudo correto?\"\n\nSe a etapa atual for \"confirmar_orcamento\":\nPergunte se deseja seguir com o orçamento para visita técnica.\nExemplo:\n\n\"Perfeito! 😊 Você deseja seguir com o orçamento para visita técnica?\"\n\nSe a etapa atual for \"finalizar\":\nResponda somente:\n\n\"Ótimo! Seus dados foram registrados e vamos encaminhar para o atendimento responsável dar continuidade ao agendamento da visita técnica. Obrigada pelo contato 😊\"\n\nDADOS QUE DEVEM SER ENVIADOS PARA REGISTRO\n\nApós a confirmação final do cliente, os dados devem ser estruturados para registro em planilha ou sistema interno com os seguintes campos:\n\nNome do cliente\nNúmero de contato\nAparelho do cliente\nMarca\nRelato do problema\nRua\nNúmero\nComplemento, se houver\nBairro\nCidade\nEstado\nStatus da confirmação dos dados\nConfirmação de interesse no orçamento com visita técnica\n\nREGRAS GERAIS\n\nFaça apenas uma pergunta por vez.\nNão peça várias informações na mesma mensagem.\nNão pule etapas.\nNão invente dados.\nNão use dados de exemplo na conversa real.\nNão pergunte cidade ou estado.\nConsidere sempre Fortaleza - CE.\nSeja objetiva e cordial.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        3504,
+        384
+      ],
+      "id": "29bd59d6-b460-4b13-b51d-682671acc7bf",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('conf-global').first().json.sessionId.replace(/\\D/g, '') }}",
+        "sessionTTL": 3600,
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+      "typeVersion": 1.5,
+      "position": [
+        3552,
+        672
+      ],
+      "id": "48695fec-ee36-49b5-bf12-569854ee7009",
+      "name": "Redis Chat Memory",
+      "credentials": {
+        "redis": {
+          "id": "A6s4qrn9KGxPzE6T",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4a559f23-805e-4c51-88ab-0aab7c336faa",
+              "name": "BotName",
+              "value": "Clara",
+              "type": "string"
+            },
+            {
+              "id": "de470681-4133-4e30-bbbf-39ed84c9eef9",
+              "name": "sessionId",
+              "value": "={{ $('config').item.json.quem_mandou }}",
+              "type": "string"
+            },
+            {
+              "id": "49317c76-a46e-492b-bfef-3f00eb7ea1ad",
+              "name": "messageGlobal",
+              "value": "={{ $('config').item.json.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        784,
+        320
+      ],
+      "id": "5d49dd72-bbb3-4dc8-bd99-968bd4c83570",
+      "name": "conf-global"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        128
+      ],
+      "id": "cb3d30a0-8740-4fc8-b170-d8f28e590c69",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a7359623-9229-46b2-b8b9-1f5c3c344c3b",
+              "leftValue": "={{ $('config').item.json.fromMe }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1088,
+        272
+      ],
+      "id": "1f91a4f2-4b94-493a-94d3-ebbf2b15e6c0",
+      "name": "FromME"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        3424,
+        672
+      ],
+      "id": "927ee240-4c50-4405-9b30-650f0f896edc",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "d0pv20Kqqudx76IZ",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2c3bdba0-d8a8-4c21-bec9-2e2ee6d2b304",
+              "name": "quem_mandou",
+              "value": "={{ $json.body.payload._data.Info.SenderAlt.replaceAll(\"@s.whatsapp.net\",\"\") }}{{ $json.body.payload._data.Info.RecipientAlt.replaceAll(\"@s.whatsapp.net\",\"\") }}",
+              "type": "string"
+            },
+            {
+              "id": "6ccd0ae1-4f88-4871-be4a-9a201e611f11",
+              "name": "instance",
+              "value": "={{ $json.body.session }}",
+              "type": "string"
+            },
+            {
+              "id": "40a2a7c9-7930-4d09-b543-3f048e39ed57",
+              "name": "message",
+              "value": "={{ $json.body.payload._data.Message.extendedTextMessage.text }}{{ $json.body.payload._data.Message.conversation }}",
+              "type": "string"
+            },
+            {
+              "id": "c236e330-95da-43db-aec4-12c713b83385",
+              "name": "id",
+              "value": "={{ $json.body.me.id }}",
+              "type": "string"
+            },
+            {
+              "id": "be1d8933-80ae-468a-95d6-ca96aec38465",
+              "name": "endPoint",
+              "value": "https://wa.whads.com.br/api/sendText",
+              "type": "string"
+            },
+            {
+              "id": "bfed676f-7e98-4c39-a90d-db28439bf428",
+              "name": "autenticador",
+              "value": "key_kgBhqFUnopH0tu2X9bL83R6auXn7GkjL",
+              "type": "string"
+            },
+            {
+              "id": "81030976-ab2a-40f1-9522-6bc83565fa06",
+              "name": "session",
+              "value": "={{ $json.body.session }}",
+              "type": "string"
+            },
+            {
+              "id": "bcc4a1c3-7cfe-4682-a74b-5ca480959707",
+              "name": "from",
+              "value": "={{ $json.body.payload.from }}",
+              "type": "string"
+            },
+            {
+              "id": "34363920-9765-40da-ac73-9adf66897674",
+              "name": "payload_id",
+              "value": "={{ $json.body.payload.id }}",
+              "type": "string"
+            },
+            {
+              "id": "53fc1f85-fb6f-4145-b852-340dcfb9b040",
+              "name": "fromMe",
+              "value": "={{ $json.body.payload.fromMe }}",
+              "type": "boolean"
+            },
+            {
+              "id": "25cbe7db-f206-49ed-aa39-729763601a5d",
+              "name": "type",
+              "value": "={{\n  $json.body.payload._data.Message.audioMessage\n    ? \"audio\"\n    : $json.body.payload._data.Message.imageMessage\n      ? \"image\"\n      : $json.body.payload._data.Message.videoMessage\n        ? \"video\"\n        : $json.body.payload._data.Message.documentMessage\n          ? \"document\"\n          : \"text\"\n}}",
+              "type": "string"
+            },
+            {
+              "id": "b2924465-0b68-459b-bcb7-5609720ec9e9",
+              "name": "dataMessage",
+              "value": "={{ $json.body.payload._data.Info.Timestamp}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        320
+      ],
+      "id": "25ba625d-5317-4eba-a2f9-3e82aa807203",
+      "name": "config"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "mensagens",
+        "key": "={{ $('config').item.json.instance }} {{ $('config').item.json.from }} temp",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        2352,
+        400
+      ],
+      "id": "81fb8b0f-00b3-4990-a729-93a0991f2dd3",
+      "name": "verificar_ultima_msg_bot",
+      "credentials": {
+        "redis": {
+          "id": "A6s4qrn9KGxPzE6T",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "isBlocked",
+        "key": "={{ $('conf-global').item.json.BotName }}_{{ $('conf-global').item.json.sessionId.replaceAll(\"@s.whatsapp.net\",\"\") }}_block",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        384
+      ],
+      "id": "c377861d-de8d-4f71-b407-3a4fd7779667",
+      "name": "get_atendimento",
+      "credentials": {
+        "redis": {
+          "id": "A6s4qrn9KGxPzE6T",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "={{ $('conf-global').item.json.BotName }}_{{ $('conf-global').item.json.sessionId.replaceAll(\"@s.whatsapp.net\",\"\") }}_block",
+        "value": "true",
+        "expire": true,
+        "ttl": 300
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        1248,
+        112
+      ],
+      "id": "431d7f63-b5f4-477a-a0f1-a2cade1c61c8",
+      "name": "create_key_humam",
+      "credentials": {
+        "redis": {
+          "id": "A6s4qrn9KGxPzE6T",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Text",
+        "session": "={{ $('config').item.json.instance }}",
+        "chatId": "={{ $('config').item.json.from }}",
+        "text": "={{ $json.output }}",
+        "linkPreview": false,
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-waha.WAHA",
+      "typeVersion": 202411,
+      "position": [
+        3904,
+        384
+      ],
+      "id": "b1863270-c912-4584-80da-34268c2634e8",
+      "name": "Send a text message",
+      "credentials": {
+        "wahaApi": {
+          "id": "60zu3QMnccnwwxUh",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "={{ $('config').item.json.instance }} {{ $('config').item.json.from }} temp",
+        "messageData": "={{ $('config').item.json.message }}",
+        "tail": true
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        1872,
+        400
+      ],
+      "id": "9e31a878-d237-4f83-80d9-d1670bdbe90b",
+      "name": "lista_mensagens",
+      "credentials": {
+        "redis": {
+          "id": "A6s4qrn9KGxPzE6T",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 6
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2112,
+        400
+      ],
+      "id": "bad74885-b326-4858-a0f3-eb71190632ec",
+      "name": "6s",
+      "webhookId": "a54ee5b5-2fd1-4ce5-9bcf-60aa85e9780e"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "53c2a26c-032a-4217-84f9-20ab3c5672c4",
+              "leftValue": "={{ $json.mensagens.last() }}",
+              "rightValue": "={{ $('conf-global').item.json.messageGlobal }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2592,
+        400
+      ],
+      "id": "ad058568-4018-45db-9e3e-b73b1c2d9611",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bb93b2d4-59dd-4b96-9b15-e21840219c86",
+              "name": "message",
+              "value": "={{ $json.mensagens.join(\" \") }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3088,
+        384
+      ],
+      "id": "e5e7ffc6-7212-4751-ba41-5a1fbafa17fe",
+      "name": "mensagem final"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "={{ $('config').item.json.instance }} {{ $('config').item.json.from }} temp"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        2896,
+        384
+      ],
+      "id": "b079d120-13a3-4f3c-8e11-e1b7d4726cf1",
+      "name": "deletar lista",
+      "credentials": {
+        "redis": {
+          "id": "A6s4qrn9KGxPzE6T",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "                        parte para verificar se um agente humano intervio\n",
+        "height": 704,
+        "width": 816
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1024,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "78db9486-482d-4c4e-8f16-3a4e6568dc24",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "                                                      BUFFER DE MENSAGEM",
+        "height": 464,
+        "width": 1200,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1840,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "7c6641a5-285c-43c3-8bad-10af5fc5e641",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "                               AGENTE  DE IA E ENVIO DE MESAGEM USANDO WAHA",
+        "height": 912,
+        "width": 1056,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3040,
+        112
+      ],
+      "typeVersion": 1,
+      "id": "1d3fb815-9d80-442f-8b9d-f6aaecb21d5c",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "                INICIO DO FLUXO USANDO WEBHOOK PARA CAPTURAR AS MENSAGENS E SEPARAÇÃO DE DADOS NECESSÁRIOS",
+        "height": 688,
+        "width": 1028,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "707ccfd2-9736-4473-927d-9f3708bf20a1",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5d5a6210-9bdd-4046-8bbb-c3b0339f9608",
+              "leftValue": "={{ $json.isBlocked }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1584,
+        384
+      ],
+      "id": "2df951f9-5484-4910-b0e5-dfd26f5ef442",
+      "name": "verifica se a chave existe do nó get"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2736,
+        544
+      ],
+      "id": "87a7a755-0164-4d4e-b968-666803575bd5",
+      "name": "No Operation, do nothing2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "title",
+              "value": "={{ $fromAI(\"nome\", \"nome completo do cliente\") }}"
+            },
+            {
+              "name": "bairro",
+              "value": "={{ $fromAI(\"bairro\", \"bairro informado pelo cliente\") }}"
+            },
+            {
+              "name": "endereco",
+              "value": "={{ $fromAI(\"endereco\", \"endereço completo informado pelo cliente\") }}"
+            },
+            {
+              "name": "telefone",
+              "value": "={{ $('config').item.json.quem_mandou }}"
+            },
+            {
+              "name": "desc",
+              "value": "={{ $fromAI(\"aparelho\", \"geladeira ou maquina de lavar\") }}"
+            },
+            {
+              "name": "marca",
+              "value": "={{ $fromAI(\"marca\", \"marca do aparelho: Consul, Brastemp ou Electrolux\") }}"
+            },
+            {
+              "name": "problema",
+              "value": "={{ $fromAI(\"problema\", \"problema relatado pelo cliente\") }}"
+            },
+            {
+              "name": "start",
+              "value": "={{ new Date}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        3712,
+        672
+      ],
+      "id": "af97c078-bf74-455a-a893-06c6de6b4db2",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "dd3c8795-8b09-49c5-a8e5-aa074df7193d",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        112,
+        320
+      ],
+      "id": "7ae65f7a-87d1-4d47-a889-9eeb69bb6df4",
+      "name": "Webhook",
+      "webhookId": "dd3c8795-8b09-49c5-a8e5-aa074df7193d"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "conf-global": {
+      "main": [
+        [
+          {
+            "node": "FromME",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FromME": {
+      "main": [
+        [
+          {
+            "node": "create_key_humam",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get_atendimento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "config": {
+      "main": [
+        [
+          {
+            "node": "conf-global",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "verificar_ultima_msg_bot": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_atendimento": {
+      "main": [
+        [
+          {
+            "node": "verifica se a chave existe do nó get",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "lista_mensagens": {
+      "main": [
+        [
+          {
+            "node": "6s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6s": {
+      "main": [
+        [
+          {
+            "node": "verificar_ultima_msg_bot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "deletar lista",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "deletar lista": {
+      "main": [
+        [
+          {
+            "node": "mensagem final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mensagem final": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "verifica se a chave existe do nó get": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "lista_mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "86ce2655-29d3-4d3d-8245-61cd97654f3f",
+  "meta": {
+    "instanceId": "7cbc5673c0ba322849fe73eb6a91f5a0e8dd9a7141029671ee73340e95be8c52"
+  },
+  "id": "fgVQm1RWyodWpoTP",
+  "tags": []
+}
